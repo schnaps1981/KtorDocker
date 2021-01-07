@@ -3,10 +3,10 @@ buildscript {
         jcenter()
         maven { url "https://plugins.gradle.org/m2/" }
     }
-    
+
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "com.github.jengelman.gradle.plugins:shadow:5.2.0"
+        classpath "com.github.jengelman.gradle.plugins:shadow:$shadow_version"
     }
 }
 
@@ -19,13 +19,13 @@ version '1'
 mainClassName = "io.ktor.server.netty.EngineMain"
 
 sourceSets {
-    main.kotlin.srcDirs = [ 'src' ]
-    main.resources.srcDirs = [ 'resources' ]
+    main.kotlin.srcDirs = ['src']
+    main.resources.srcDirs = ['resources']
 }
 
 
-
 repositories {
+    mavenCentral()
     mavenLocal()
     jcenter()
     maven { url 'https://kotlin.bintray.com/ktor' }
@@ -33,14 +33,20 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "io.ktor:ktor-server-netty:$ktor_version"
-    implementation "ch.qos.logback:logback-classic:$logback_version"
-    implementation "io.ktor:ktor-server-core:$ktor_version"
-    testImplementation "io.ktor:ktor-server-tests:$ktor_version"
-    implementation "io.ktor:ktor-html-builder:$ktor_version"
 
+    implementation "io.ktor:ktor-server-core:$ktor_version"
+    implementation "io.ktor:ktor-server-netty:$ktor_version"
+    implementation "io.ktor:ktor-html-builder:$ktor_version"
     implementation "io.ktor:ktor-gson:$ktor_version"
 
+    implementation "ch.qos.logback:logback-classic:$logback_version"
+
+    implementation "org.jetbrains.exposed:exposed-core:$exposed_version"
+    implementation "org.jetbrains.exposed:exposed-jdbc:$exposed_version"
+    implementation "org.jetbrains.exposed:exposed-dao:$exposed_version"
+
+    implementation "org.postgresql:postgresql:42.2.12"
+    implementation "com.zaxxer:HikariCP:3.4.5"
 }
 
 kotlin.experimental.coroutines = 'enable'

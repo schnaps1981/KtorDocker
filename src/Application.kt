@@ -1,19 +1,19 @@
 package com.example
 
+import com.example.db.DatabaseFactory
+import com.example.repository.human.HumanRepositoryImpl
+import com.example.routes.humanRoute
+import com.example.routes.rootRoute
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.gson.*
-import io.ktor.html.*
-import io.ktor.response.*
 import io.ktor.routing.*
-import kotlinx.html.body
-import kotlinx.html.head
-import kotlinx.html.p
-import kotlinx.html.title
-import kotlin.random.Random
+
+fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 fun Application.main() {
     install(DefaultHeaders)
+
     install(CallLogging)
 
     install(ContentNegotiation) {
@@ -23,28 +23,12 @@ fun Application.main() {
         }
     }
 
-    routing {
-        get("/") {
-            call.respondHtml {
-                head {
-                    title { +"Ktor: jetty" }
-                }
-                body {
-                    p {
-                        +"Hello from Ktor Jetty engine sample application -= PARANOID =- "
-                    }
-                }
-            }
-        }
+    DatabaseFactory.init()
 
-        get("/gson") {
-            call.respond(Human(
-                name = listOf("Vasili", "Aleksey", "Ivan", "Viktor").shuffled().first(),
-                age = Random.nextInt(10, 60),
-                weight = Random.nextInt(50, 120),
-                height = Random.nextInt(155, 205),
-                isMale = Random.nextBoolean()
-            ))
-        }
+    val humanRepository = HumanRepositoryImpl()
+
+    install(Routing) {
+        rootRoute()
+        humanRoute(humanRepository)
     }
 }
