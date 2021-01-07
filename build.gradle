@@ -25,6 +25,9 @@ sourceSets {
     main.resources.srcDirs = ['resources']
 }
 
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
 
 repositories {
     mavenCentral()
@@ -53,6 +56,9 @@ dependencies {
     implementation "org.koin:koin-core:$koin_version"
     implementation "org.koin:koin-ktor:$koin_version"
     implementation "org.koin:koin-core-ext:$koin_version"
+
+    implementation "it.skrape:skrapeit-core:$skrapeit_version"
+    implementation "it.skrape:skrapeit-ktor:+"
 }
 
 shadowJar {
