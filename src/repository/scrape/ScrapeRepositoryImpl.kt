@@ -10,6 +10,7 @@ import it.skrape.extractIt
 import it.skrape.selects.html5.a
 import it.skrape.skrape
 import models.Links
+import org.jetbrains.exposed.sql.batchInsert
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertAndGetId
 
@@ -39,13 +40,10 @@ class ScrapeRepositoryImpl : ScrapeRepository {
                 it[url] = links.url
             }
 
-            links.links.forEach { onPageUrl ->
-                LinksTable.insert {
-                    it[link] = onPageUrl
-                    it[pageId] = id.value
-                }
+            LinksTable.batchInsert(links.links) {
+                this[LinksTable.link] = it
+                this[LinksTable.pageId] = id.value
             }
         }
-
     }
 }
